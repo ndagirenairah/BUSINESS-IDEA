@@ -1,5 +1,7 @@
 # Dependencies
 node_modules/
+mobile-app/node_modules/
+mobile-app/.expo/
 
 # Environment variables (IMPORTANT - never push secrets!)
 .env

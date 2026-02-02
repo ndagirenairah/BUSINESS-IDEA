@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Business API Tester</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: white; text-align: center; margin-bottom: 30px; font-size: 2.5em; }
+        .card { 
+            background: white; border-radius: 15px; padding: 25px; 
+            margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .card h2 { color: #667eea; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        input, select, textarea { 
+            width: 100%; padding: 12px; border: 2px solid #ddd; 
+            border-radius: 8px; font-size: 14px; transition: border 0.3s;
+        }
+        input:focus, select:focus, textarea:focus { border-color: #667eea; outline: none; }
+        button { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 15px 30px; border: none; 
+            border-radius: 8px; cursor: pointer; font-size: 16px;
+            font-weight: bold; width: 100%; margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .response { 
+            background: #1e1e1e; color: #0f0; padding: 15px; 
+            border-radius: 8px; margin-top: 15px; font-family: monospace;
+            max-height: 300px; overflow-y: auto; white-space: pre-wrap;
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+        .status { padding: 10px 20px; border-radius: 20px; display: inline-block; margin-bottom: 20px; }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab { 
+            padding: 10px 20px; background: #eee; border-radius: 8px; 
+            cursor: pointer; font-weight: bold; transition: all 0.3s;
+        }
+        .tab.active { background: #667eea; color: white; }
+        .section { display: none; }
+        .section.active { display: block; }
+        .product-card { 
+            border: 1px solid #ddd; padding: 15px; border-radius: 10px; 
+            margin-bottom: 10px; background: #f9f9f9;
+        }
+        .product-card h4 { color: #667eea; }
+        .price { color: #28a745; font-weight: bold; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Business Management API Tester</h1>
+        
+        <div class="card">
+            <div id="serverStatus" class="status">⏳ Checking server...</div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showSection('register')">📝 Register</div>
+            <div class="tab" onclick="showSection('login')">🔐 Login</div>
+            <div class="tab" onclick="showSection('products')">📦 Products</div>
+            <div class="tab" onclick="showSection('orders')">🛒 Orders</div>
+            <div class="tab" onclick="showSection('view')">👀 View All</div>
+        </div>
+
+        <div class="grid">
+            <!-- REGISTER SECTION -->
+            <div id="register" class="section active card">
+                <h2>📝 Register New Business</h2>
+                <div class="form-group">
+                    <label>Business Name</label>
+                    <input type="text" id="regBusinessName" value="Nairah Fashion Uganda">
+                </div>
+                <div class="form-group">
+                    <label>Business Type</label>
+                    <select id="regBusinessType">
+                        <option value="clothing">👕 Clothing</option>
+                        <option value="electronics">📱 Electronics</option>
+                        <option value="food">🍔 Food</option>
+                        <option value="shoes">👟 Shoes</option>
+                        <option value="accessories">💍 Accessories</option>
+                        <option value="other">📦 Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="regName" value="Nairah">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" value="nairah@business.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" value="password123">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" id="regPhone" value="+256788123456">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="regLocation" value="Kampala, Uganda">
+                </div>
+                <button onclick="register()">🚀 Register Business</button>
+                <div id="registerResponse" class="response"></div>
+            </div>
+
+            <!-- LOGIN SECTION -->
+            <div id="login" class="section card">
+                <h2>🔐 Login</h2>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" value="nairah@business.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" value="password123">
+                </div>
+                <button onclick="login()">🔑 Login</button>
+                <div id="loginResponse" class="response"></div>
+            </div>
+
+            <!-- PRODUCTS SECTION -->
+            <div id="products" class="section card">
+                <h2>📦 Add Product</h2>
+                <p style="color: #666; margin-bottom: 15px;">⚠️ Login first to add products!</p>
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="productName" value="Blue T-Shirt">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" id="productCategory" value="shirts">
+                </div>
+                <div class="form-group">
+                    <label>Price (RWF)</label>
+                    <input type="number" id="productPrice" value="15000">
+                </div>
+                <div class="form-group">
+                    <label>Stock</label>
+                    <input type="number" id="productStock" value="50">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="productDescription" rows="3">Beautiful comfortable cotton t-shirt</textarea>
+                </div>
+                <button onclick="addProduct()">➕ Add Product</button>
+                <div id="productResponse" class="response"></div>
+            </div>
+
+            <!-- ORDERS SECTION -->
+            <div id="orders" class="section card">
+                <h2>🛒 Place Order (As Customer)</h2>
+                <div class="form-group">
+                    <label>Product ID</label>
+                    <input type="text" id="orderProductId" placeholder="Enter product ID from View All">
+                </div>
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="orderCustomerName" value="John Customer">
+                </div>
+                <div class="form-group">
+                    <label>Your Phone</label>
+                    <input type="text" id="orderCustomerPhone" value="+250788999888">
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" id="orderQuantity" value="2">
+                </div>
+                <button onclick="placeOrder()">🛒 Place Order</button>
+                <div id="orderResponse" class="response"></div>
+            </div>
+
+            <!-- VIEW ALL SECTION -->
+            <div id="view" class="section card">
+                <h2>👀 View Data</h2>
+                <button onclick="viewProducts()">📦 View All Products</button>
+                <button onclick="viewBusinesses()" style="margin-top: 10px;">🏪 View All Businesses</button>
+                <button onclick="viewMyOrders()" style="margin-top: 10px;">📋 View My Orders (Login Required)</button>
+                <div id="viewResponse" class="response"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API = 'http://localhost:5000/api';
+        let token = localStorage.getItem('token') || '';
+
+        // Check server status
+        async function checkServer() {
+            try {
+                const res = await fetch('http://localhost:5000/');
+                const data = await res.json();
+                document.getElementById('serverStatus').className = 'status success';
+                document.getElementById('serverStatus').innerHTML = '✅ Server Connected! ' + data.message;
+            } catch (e) {
+                document.getElementById('serverStatus').className = 'status error';
+                document.getElementById('serverStatus').innerHTML = '❌ Server not running. Start with: node server.js';
+            }
+        }
+        checkServer();
+
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        async function register() {
+            const data = {
+                businessName: document.getElementById('regBusinessName').value,
+                businessType: document.getElementById('regBusinessType').value,
+                name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value,
+                phone: document.getElementById('regPhone').value,
+                whatsapp: document.getElementById('regPhone').value,
+                location: document.getElementById('regLocation').value
+            };
+            try {
+                const res = await fetch(API + '/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.token) {
+                    token = result.token;
+                    localStorage.setItem('token', token);
+                }
+                document.getElementById('registerResponse').textContent = JSON.stringify(result, null, 2);
+            } catch (e) {
+                document.getElementById('registerResponse').textContent = 'Error: ' + e.message;
+            }
+        }
+
+        async function login() {
+            const data = {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value
+            };
+            try {
+                const res = await fetch(API + '/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.token) {
+                    token = result.token;
+                    localStorage.setItem('token', token);
+                }
+                document.getElementById('loginResponse').textContent = JSON.stringify(result, null, 2);
+            } catch (e) {
+                document.getElementById('loginResponse').textContent = 'Error: ' + e.message;
+            }
+        }
+
+        async function addProduct() {
+            if (!token) {
+                document.getElementById('productResponse').textContent = '⚠️ Please login first!';
+                return;
+            }
+            const data = {
+                name: document.getElementById('productName').value,
+                category: document.getElementById('productCategory').value,
+                price: Number(document.getElementById('productPrice').value),
+                stock: Number(document.getElementById('productStock').value),
+                description: document.getElementById('productDescription').value
+            };
+            try {
+                const res = await fetch(API + '/products', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                document.getElementById('productResponse').textContent = JSON.stringify(result, null, 2);
+            } catch (e) {
+                document.getElementById('productResponse').textContent = 'Error: ' + e.message;
+            }
+        }
+
+        async function placeOrder() {
+            const data = {
+                productId: document.getElementById('orderProductId').value,
+                customerName: document.getElementById('orderCustomerName').value,
+                customerPhone: document.getElementById('orderCustomerPhone').value,
+                quantity: Number(document.getElementById('orderQuantity').value)
+            };
+            try {
+                const res = await fetch(API + '/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                document.getElementById('orderResponse').textContent = JSON.stringify(result, null, 2);
+            } catch (e) {
+                document.getElementById('orderResponse').textContent = 'Error: ' + e.message;
+            }
+        }
+
+        async function viewProducts() {
+            try {
+                const res = await fetch(API + '/products');
+                const result = await res.json();
+                document.getElementById('viewResponse').textContent = '📦 PRODUCTS:\n\n' + JSON.stringify(result, null, 2);
+            } catch (e) {
+                document.getElementById('viewResponse').textContent = 'Error: ' + e.message;
+            }
+        }
+
+        async function viewBusinesses() {
+            try {
+                const res = await fetch(API + '/business');
+                const result = await res.json();
+                document.getElementById('viewResponse').textContent = '🏪 BUSINESSES:\n\n' + JSON.stringify(result, null, 2);
+            } catch (e) {
+                document.getElementById('viewResponse').textContent = 'Error: ' + e.message;
+            }
+        }
+
+        async function viewMyOrders() {
+            if (!token) {
+                document.getElementById('viewResponse').textContent = '⚠️ Please login first!';
+                return;
+            }
+            try {
+                const res = await fetch(API + '/orders/my-orders', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const result = await res.json();
+                document.getElementById('viewResponse').textContent = '📋 MY ORDERS:\n\n' + JSON.stringify(result, null, 2);
+            } catch (e) {
+                document.getElementById('viewResponse').textContent = 'Error: ' + e.message;
+            }
+        }
+    </script>
+</body>
+</html>
